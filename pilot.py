@@ -1,8 +1,8 @@
 import pandas as pd
 
 # Stage 1: Load data
-sched = pd.read_csv("lakers_2026_schedule.csv")
-log = pd.read_csv("lakers_2026_gamelog.csv")
+sched = pd.read_csv("data/lakers_2026_schedule.csv")
+log = pd.read_csv("data/lakers_2026_gamelog.csv")
 
 # Stage 2: Clean
 sched = sched.rename(columns={"Unnamed: 5": "loc"})
