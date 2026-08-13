@@ -21,6 +21,7 @@ def load_team_season(team, season):
     assert len(df) == len(log), "merge changed row count"
 
     # Stage 4: filter to home games, compute eFG
+    # neutral-site NBA Cup games excluded — marked "@" by bbref; some teams have 40 true home games
     home = df[df["loc"].isna()].copy()
     home["efg"] = (home["FG"] + 0.5 * home["3P"]) / home["FGA"]
 
