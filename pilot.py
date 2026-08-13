@@ -1,40 +1,46 @@
 import pandas as pd
-
-# Stage 1: Load data
-sched = pd.read_csv("data/lakers_2026_schedule.csv")
-log = pd.read_csv("data/lakers_2026_gamelog.csv")
-
-# Stage 2: Clean
-sched = sched.rename(columns={"Unnamed: 5": "loc"})
-log = log.rename(columns={"Unnamed: 3": "loc"})
-
-sched = sched[sched["Date"] != "Date"]
-log = log[log["Date"] != "Date"]
-
-sched["Date"] = pd.to_datetime(sched["Date"])
-log["Date"] = pd.to_datetime(log["Date"])
-
-log = log.dropna(subset=["Date"])
-
-# Stage 3: Merge attendance onto game log
-df = log.merge(sched[["Date", "Attend."]], on="Date", how="inner")
-assert len(df) == len(log), "merge changed row count"
-
-
-# Stage 4: filter and compute
-home = df[df["loc"].isna()].copy()
-
-
-home["efg"] = (home["FG"] + 0.5 * home["3P"]) / home["FGA"]
-
-
-# Stage 5: scatter 
 import matplotlib.pyplot as plt
 
-plt.scatter(home["Attend."], home["efg"])
+
+def load_team_season(team, season):
+    # Stage 1: Load
+    sched = pd.read_csv(f"data/{team}_{season}_schedule.csv")
+    log = pd.read_csv(f"data/{team}_{season}_gamelog.csv")
+
+    # Stage 2: Clean
+    sched = sched.rename(columns={"Unnamed: 5": "loc"})
+    log = log.rename(columns={"Unnamed: 3": "loc"})
+    sched = sched[sched["Date"] != "Date"]
+    log = log[log["Date"] != "Date"]
+    sched["Date"] = pd.to_datetime(sched["Date"])
+    log["Date"] = pd.to_datetime(log["Date"])
+    log = log.dropna(subset=["Date"])
+
+    # Stage 3: Merge attendance onto game log
+    df = log.merge(sched[["Date", "Attend."]], on="Date", how="inner")
+    assert len(df) == len(log), "merge changed row count"
+
+    # Stage 4: filter to home games, compute eFG
+    home = df[df["loc"].isna()].copy()
+    home["efg"] = (home["FG"] + 0.5 * home["3P"]) / home["FGA"]
+
+    # stamp and return
+    home["team"] = team
+    home["season"] = season
+    return home
+
+
+# --- main script ---
+teams = ["lakers", "celtics", "knicks", "pistons", "wizards"]
+frames = []
+for team in teams:
+    frames.append(load_team_season (team, 2026))
+
+all_games = pd.concat(frames, ignore_index=True)
+print(all_games.groupby("team").size())
+
+plt.scatter(all_games["Attend."], all_games["efg"])
 plt.xlabel("Attendance")
 plt.ylabel("eFG%")
-plt.title("Lakers 2025-26: home attendance vs eFG%")
-plt.savefig("lakers_pilot.png")
-
-plt.show()
+plt.title("Home attendance vs eFG%, 5 teams, 2025-26")
+plt.savefig("five_team_scatter.png")
