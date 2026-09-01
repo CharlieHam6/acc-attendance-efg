@@ -40,10 +40,11 @@ def load_team_season(team, season):
 
 
 # --- main script ---
-teams = ["lakers", "celtics", "knicks", "pistons", "wizards", "raptors", "philly", "nets", "thunder", "nuggets", "timberwolves", "trailblazers", "jazz", "bucks", "bulls", "cavaliers", "pacers"]
+teams = ["lakers", "celtics", "knicks", "pistons", "wizards", "raptors", "philly", "nets", "thunder", "nuggets", "timberwolves", "trailblazers", "jazz", "bucks", "bulls", "cavaliers", "pacers", "suns", "warriors", "kings","clippers", "hawks","hornets", "magic", "heat"] 
 frames = []
 for team in teams:
-    frames.append(load_team_season (team, 2026))
+    print("loading", team)
+    frames.append(load_team_season(team, 2026))
 
 all_games = pd.concat(frames, ignore_index=True)
 print(all_games.groupby("team").size())
