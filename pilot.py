@@ -40,7 +40,7 @@ def load_team_season(team, season):
 
 
 # --- main script ---
-teams = ["lakers", "celtics", "knicks", "pistons", "wizards", "raptors", "philly", "nets", "thunder", "nuggets", "timberwolves", "trailblazers", "jazz"]
+teams = ["lakers", "celtics", "knicks", "pistons", "wizards", "raptors", "philly", "nets", "thunder", "nuggets", "timberwolves", "trailblazers", "jazz", "bucks", "bulls", "cavaliers", "pacers"]
 frames = []
 for team in teams:
     frames.append(load_team_season (team, 2026))
