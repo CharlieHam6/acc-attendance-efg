@@ -1,6 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# Games designated "home" but played at a neutral site (NBA Cup, Las Vegas).
+# bbref leaves loc blank for the home-designated team, so they'd count as home games.
+NEUTRAL_SITE = {
+    ("thunder", 2026): ["2025-12-13"],
+}
 
 def load_team_season(team, season):
     # Stage 1: Load
@@ -18,13 +23,16 @@ def load_team_season(team, season):
 
     # Stage 3: Merge attendance onto game log
     df = log.merge(sched[["Date", "Attend."]], on="Date", how="inner")
-    assert len(df) == len(log), "merge changed row count"
+    assert len(df) == len(log), f"{team}: merge changed rows {len(log)} -> {len(df)}"
 
     # Stage 4: filter to home games, compute eFG
     # neutral-site NBA Cup games excluded — marked "@" by bbref; some teams have 40 true home games
     home = df[df["loc"].isna()].copy()
     home["efg"] = (home["FG"] + 0.5 * home["3P"]) / home["FGA"]
-
+    
+    for d in NEUTRAL_SITE.get((team, season), []):
+        home = home[home["Date"] != pd.Timestamp(d)]
+    
     # stamp and return
     home["team"] = team
     home["season"] = season
@@ -32,7 +40,7 @@ def load_team_season(team, season):
 
 
 # --- main script ---
-teams = ["lakers", "celtics", "knicks", "pistons", "wizards"]
+teams = ["lakers", "celtics", "knicks", "pistons", "wizards", "raptors", "philly", "nets", "thunder", "nuggets", "timberwolves", "trailblazers", "jazz"]
 frames = []
 for team in teams:
     frames.append(load_team_season (team, 2026))
