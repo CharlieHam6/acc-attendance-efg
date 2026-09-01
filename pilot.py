@@ -40,7 +40,12 @@ def load_team_season(team, season):
 
 
 # --- main script ---
-teams = ["lakers", "celtics", "knicks", "pistons", "wizards", "raptors", "philly", "nets", "thunder", "nuggets", "timberwolves", "trailblazers", "jazz", "bucks", "bulls", "cavaliers", "pacers", "suns", "warriors", "kings","clippers", "hawks","hornets", "magic", "heat"] 
+teams = ["lakers", "celtics", "knicks", "pistons", "wizards", "raptors", "philly", "nets", "thunder", "nuggets", "timberwolves", "trailblazers", "jazz", "bucks", "bulls", "cavaliers", "pacers", "suns", "warriors", "kings","clippers", "hawks","hornets", "magic", "heat", "spurs", "rockets", "pelicans", "mavericks", "grizzlies"] 
+import os
+for team in teams:
+    for kind in ["schedule", "gamelog"]:
+        path = f"data/{team}_2026_{kind}.csv"
+        assert os.path.exists(path), f"missing: {path}"
 frames = []
 for team in teams:
     print("loading", team)
