@@ -17,7 +17,7 @@ I estimated two linear regression models. The first looks only at attendance and
 
 | Model | attend_k coef | attend_k p | SRS coef | SRS p |
 |---|---|---|---|---|
-| Naive (attendance only) | NAIVE_COEF_HERE | 0.774 | — | — |
+| Naive (attendance only) | 0.00035 | 0.774 | — | — |
 | Controlled (+ SRS) | 0.00088 | 0.466 | -0.00227 | 3.6e-13 |
 
 *attend_k is attendance in thousands, so 0.00088 ≈ +0.09 percentage points of eFG% per 1,000 extra fans.*
