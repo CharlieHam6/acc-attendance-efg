@@ -113,3 +113,4 @@ plt.xlabel("Attendance")
 plt.ylabel("eFG%")
 plt.title(f"Home attendance vs eFG%, {all_games['team'].nunique()} teams, 2025-26")
 plt.savefig("league_scatter.png")
+
